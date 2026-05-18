@@ -22,7 +22,7 @@
     <property scope="context" name="log.base.ctx" value="${log.base}" />
 
     <conversionRule conversionWord="message"
-                    converterClass="org.apache.dolphinscheduler.plugin.task.api.log.SensitiveDataConverter"/>
+                    converterClass="org.apache.dolphinscheduler.common.log.SensitiveDataConverter"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
