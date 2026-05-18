@@ -27,7 +27,7 @@ import org.apache.dolphinscheduler.plugin.datasource.hive.security.UserGroupInfo
 import org.apache.dolphinscheduler.spi.datasource.BaseConnectionParam;
 import org.apache.dolphinscheduler.spi.enums.DbType;
 
-import sun.security.krb5.Config;
+//import sun.security.krb5.Config;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,20 +54,20 @@ public class HivePooledDataSourceClient extends BasePooledDataSourceClient {
 
     // used in constructor
     private void checkKerberosEnv() {
-        String krb5File = PropertyUtils.getString(JAVA_SECURITY_KRB5_CONF_PATH);
-        Boolean kerberosStartupState = PropertyUtils.getBoolean(HADOOP_SECURITY_AUTHENTICATION_STARTUP_STATE, false);
-        if (kerberosStartupState && StringUtils.isNotBlank(krb5File)) {
-            System.setProperty(JAVA_SECURITY_KRB5_CONF, krb5File);
-            try {
-                Config.refresh();
-                Class<?> kerberosName = Class.forName("org.apache.hadoop.security.authentication.util.KerberosName");
-                Field field = kerberosName.getDeclaredField("defaultRealm");
-                field.setAccessible(true);
-                field.set(null, Config.getInstance().getDefaultRealm());
-            } catch (Exception e) {
-                throw new RuntimeException("Update Kerberos environment failed.", e);
-            }
-        }
+//        String krb5File = PropertyUtils.getString(JAVA_SECURITY_KRB5_CONF_PATH);
+//        Boolean kerberosStartupState = PropertyUtils.getBoolean(HADOOP_SECURITY_AUTHENTICATION_STARTUP_STATE, false);
+//        if (kerberosStartupState && StringUtils.isNotBlank(krb5File)) {
+//            System.setProperty(JAVA_SECURITY_KRB5_CONF, krb5File);
+//            try {
+//                Config.refresh();
+//                Class<?> kerberosName = Class.forName("org.apache.hadoop.security.authentication.util.KerberosName");
+//                Field field = kerberosName.getDeclaredField("defaultRealm");
+//                field.setAccessible(true);
+//                field.set(null, Config.getInstance().getDefaultRealm());
+//            } catch (Exception e) {
+//                throw new RuntimeException("Update Kerberos environment failed.", e);
+//            }
+//        }
     }
 
     @Override
