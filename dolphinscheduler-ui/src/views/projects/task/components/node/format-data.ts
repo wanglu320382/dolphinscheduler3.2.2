@@ -249,6 +249,10 @@ export function formatParams(data: INodeData): {
     }
   }
 
+  if (data.taskType === 'DATAXML') {
+    taskParams.xmlContent = data.xmlContent
+  }
+
   if (data.taskType === 'DATAX') {
     taskParams.customConfig = data.customConfig ? 1 : 0
     if (taskParams.customConfig === 0) {

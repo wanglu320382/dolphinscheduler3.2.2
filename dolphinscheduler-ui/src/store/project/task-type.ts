@@ -63,6 +63,9 @@ export const TASK_TYPES_MAP = {
   DATAX: {
     alias: 'DataX'
   },
+  DATAXML: {
+    alias: 'DataXML'
+  },
   PIGEON: {
     alias: 'PIGEON'
   },

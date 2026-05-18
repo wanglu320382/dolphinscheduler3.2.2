@@ -27,6 +27,7 @@ export type TaskType =
   | 'DEPENDENT'
   | 'HTTP'
   | 'DATAX'
+    | 'DATAXML'
   | 'PIGEON'
   | 'SQOOP'
   | 'CONDITIONS'

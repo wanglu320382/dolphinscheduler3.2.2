@@ -31,6 +31,7 @@
         <module>dolphinscheduler-task-api</module>
         <module>dolphinscheduler-task-shell</module>
         <module>dolphinscheduler-task-datax</module>
+        <module>dolphinscheduler-task-dataxml</module>
         <module>dolphinscheduler-task-flink</module>
         <module>dolphinscheduler-task-http</module>
         <module>dolphinscheduler-task-mr</module>

@@ -325,6 +325,7 @@ interface ITaskParams {
   nextNode?: number
   dependence?: IDependentParameters
   customConfig?: number
+  xmlContent?: string
   json?: string
   dsType?: string
   dataSource?: number
