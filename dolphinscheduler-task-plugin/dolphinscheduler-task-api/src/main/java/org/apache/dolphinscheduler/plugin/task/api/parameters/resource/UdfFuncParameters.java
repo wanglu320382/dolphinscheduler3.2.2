@@ -25,8 +25,10 @@ import java.util.Date;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Data
+@JsonTypeName("UDF")
 public class UdfFuncParameters extends AbstractResourceParameters {
 
     /**

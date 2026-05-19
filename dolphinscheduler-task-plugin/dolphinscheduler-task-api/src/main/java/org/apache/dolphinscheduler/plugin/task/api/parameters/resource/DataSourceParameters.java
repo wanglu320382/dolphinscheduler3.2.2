@@ -20,7 +20,9 @@ package org.apache.dolphinscheduler.plugin.task.api.parameters.resource;
 import org.apache.dolphinscheduler.spi.enums.DbType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("DATASOURCE")
 public class DataSourceParameters extends AbstractResourceParameters {
 
     private DbType type;
