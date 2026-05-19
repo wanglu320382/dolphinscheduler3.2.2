@@ -38,6 +38,11 @@ public class DataSourceParameters extends AbstractResourceParameters {
 
     private String connectionParams;
 
+    /**
+     * 数据源名称（t_ds_datasource.name），供按名称引用数据源的任务在 Master 装配前使用。
+     */
+    private String name;
+
     public DbType getType() {
         return type;
     }
@@ -52,5 +57,13 @@ public class DataSourceParameters extends AbstractResourceParameters {
 
     public void setConnectionParams(String connectionParams) {
         this.connectionParams = connectionParams;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

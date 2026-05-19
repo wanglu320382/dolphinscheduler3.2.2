@@ -20,7 +20,7 @@ package org.apache.dolphinscheduler.plugin.task.dataxml;
 import org.apache.dolphinscheduler.plugin.task.api.enums.ResourceType;
 import org.apache.dolphinscheduler.plugin.task.api.parameters.AbstractParameters;
 import org.apache.dolphinscheduler.plugin.task.api.parameters.resource.ResourceParametersHelper;
-import org.apache.dolphinscheduler.plugin.task.dataxml.datasource.DataxmlDataSourceRef;
+import org.apache.dolphinscheduler.plugin.task.api.parameters.resource.DataSourceParameters;
 import org.apache.dolphinscheduler.plugin.task.dataxml.util.XDataUtil;
 import org.apache.dolphinscheduler.plugin.task.dataxml.xdata.template.BusType;
 import org.apache.dolphinscheduler.plugin.task.dataxml.xdata.template.XdataTemplate;
@@ -70,8 +70,9 @@ public class DataxmlParameters extends AbstractParameters {
                 collectDatasource(names, template.getToDs(), null);
             }
             for (String name : names) {
-                DataxmlDataSourceRef ref = new DataxmlDataSourceRef();
+                DataSourceParameters ref = new DataSourceParameters();
                 ref.setName(name);
+                ref.setResourceType("DATASOURCE");
                 resources.put(ResourceType.DATASOURCE, name.hashCode(), ref);
             }
         } catch (Exception e) {

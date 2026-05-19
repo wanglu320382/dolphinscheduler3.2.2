@@ -120,6 +120,8 @@ public interface ProcessService {
 
     DataSource findDataSourceById(int id);
 
+    DataSource findDataSourceByName(String name);
+
     List<UdfFunc> queryUdfFunListByIds(Integer[] ids);
 
     ProjectUser queryProjectWithUserByProcessInstanceId(int processInstanceId);

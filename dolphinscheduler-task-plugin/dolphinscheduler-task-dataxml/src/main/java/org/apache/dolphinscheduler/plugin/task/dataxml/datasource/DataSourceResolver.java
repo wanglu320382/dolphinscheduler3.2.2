@@ -94,9 +94,9 @@ public class DataSourceResolver {
             // dsKey 为数据源名称，非数字 ID
         }
         for (Map.Entry<Integer, AbstractResourceParameters> entry : datasourceMap.entrySet()) {
-            if (entry.getValue() instanceof DataxmlDataSourceRef) {
-                DataxmlDataSourceRef ref = (DataxmlDataSourceRef) entry.getValue();
-                if (dsKey.equals(ref.getName())) {
+            if (entry.getValue() instanceof DataSourceParameters) {
+                DataSourceParameters params = (DataSourceParameters) entry.getValue();
+                if (dsKey.equals(params.getName())) {
                     return entry.getKey();
                 }
             }

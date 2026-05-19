@@ -169,16 +169,29 @@ public class TaskExecutionContextFactory {
             return;
         }
 
-        map.forEach((code, parameters) -> {
+        List<Map.Entry<Integer, AbstractResourceParameters>> entries = new ArrayList<>(map.entrySet());
+        map.clear();
+        for (Map.Entry<Integer, AbstractResourceParameters> entry : entries) {
+            int code = entry.getKey();
+            AbstractResourceParameters parameters = entry.getValue();
             DataSource datasource = processService.findDataSourceById(code);
+            if (Objects.isNull(datasource) && parameters instanceof DataSourceParameters) {
+                String dsName = ((DataSourceParameters) parameters).getName();
+                if (StringUtils.isNotEmpty(dsName)) {
+                    datasource = processService.findDataSourceByName(dsName);
+                }
+            }
             if (Objects.isNull(datasource)) {
-                return;
+                log.warn("未找到数据源，code={}, parameters={}", code, parameters.getClass().getSimpleName());
+                continue;
             }
             DataSourceParameters dataSourceParameters = new DataSourceParameters();
             dataSourceParameters.setType(datasource.getType());
             dataSourceParameters.setConnectionParams(datasource.getConnectionParams());
-            map.put(code, dataSourceParameters);
-        });
+            dataSourceParameters.setName(datasource.getName());
+            dataSourceParameters.setResourceType("DATASOURCE");
+            map.put(datasource.getId(), dataSourceParameters);
+        }
     }
 
     private void setTaskUdfFuncResourceInfo(Map<Integer, AbstractResourceParameters> map) {

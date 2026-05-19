@@ -1500,6 +1500,18 @@ public class ProcessServiceImpl implements ProcessService {
         return dataSourceMapper.selectById(id);
     }
 
+    @Override
+    public DataSource findDataSourceByName(String name) {
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+        List<DataSource> dataSources = dataSourceMapper.queryDataSourceByName(name.trim());
+        if (CollectionUtils.isEmpty(dataSources)) {
+            return null;
+        }
+        return dataSources.get(0);
+    }
+
     /**
      * find udf function list by id list string
      *
