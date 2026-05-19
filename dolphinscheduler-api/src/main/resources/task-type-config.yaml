@@ -44,6 +44,7 @@ task:
   dataIntegration:
     - 'SEATUNNEL'
     - 'DATAX'
+    - 'DATAXML'
     - 'SQOOP'
   dataQuality:
     - 'DATA_QUALITY'
