@@ -15,31 +15,21 @@
  * limitations under the License.
  */
 
-package org.apache.dolphinscheduler.plugin.task.dataxml;
+package org.apache.dolphinscheduler.plugin.task.dataxml.datasource;
 
-import org.apache.dolphinscheduler.plugin.task.api.TaskChannel;
-import org.apache.dolphinscheduler.plugin.task.api.TaskChannelFactory;
-import org.apache.dolphinscheduler.spi.params.base.PluginParams;
+import org.apache.dolphinscheduler.plugin.task.api.parameters.resource.AbstractResourceParameters;
 
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 通过 META-INF/services/org.apache.dolphinscheduler.plugin.task.api.TaskChannelFactory 注册。
+ * 按数据源名称（t_ds_datasource.name）注册资源时的占位对象。
+ * 3.2.2 的 {@link org.apache.dolphinscheduler.plugin.task.api.parameters.resource.DataSourceParameters}
+ * 不含 name 字段，由本类在 Master 装配前携带名称信息。
  */
-public class DataxmlTaskChannelFactory implements TaskChannelFactory {
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class DataxmlDataSourceRef extends AbstractResourceParameters {
 
-    @Override
-    public String getName() {
-        return "DATAXML";
-    }
-
-    @Override
-    public List<PluginParams> getParams() {
-        return null;
-    }
-
-    @Override
-    public TaskChannel create() {
-        return new DataxmlTaskChannel();
-    }
+    private String name;
 }

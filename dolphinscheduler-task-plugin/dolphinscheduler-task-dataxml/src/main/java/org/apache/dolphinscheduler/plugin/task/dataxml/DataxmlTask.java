@@ -96,6 +96,6 @@ public class DataxmlTask extends AbstractTask {
             }
         });
         dataxmlParameters.dealOutParam(outMap);
-        taskExecutionContext.setVarPool(dataxmlParameters.getVarPool());
+        taskExecutionContext.setVarPool(JSONUtils.toJsonString(dataxmlParameters.getVarPool()));
     }
 }

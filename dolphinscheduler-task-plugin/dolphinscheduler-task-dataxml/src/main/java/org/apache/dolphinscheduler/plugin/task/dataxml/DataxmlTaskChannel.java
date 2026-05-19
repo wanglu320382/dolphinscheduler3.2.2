@@ -22,8 +22,15 @@ import org.apache.dolphinscheduler.plugin.task.api.AbstractTask;
 import org.apache.dolphinscheduler.plugin.task.api.TaskChannel;
 import org.apache.dolphinscheduler.plugin.task.api.TaskExecutionContext;
 import org.apache.dolphinscheduler.plugin.task.api.parameters.AbstractParameters;
+import org.apache.dolphinscheduler.plugin.task.api.parameters.ParametersNode;
+import org.apache.dolphinscheduler.plugin.task.api.parameters.resource.ResourceParametersHelper;
 
 public class DataxmlTaskChannel implements TaskChannel {
+
+    @Override
+    public void cancelApplication(boolean status) {
+        // 进程内 JDBC/HTTP，无外部应用可取消
+    }
 
     @Override
     public AbstractTask createTask(TaskExecutionContext taskRequest) {
@@ -31,7 +38,16 @@ public class DataxmlTaskChannel implements TaskChannel {
     }
 
     @Override
-    public AbstractParameters parseParameters(String taskParams) {
-        return JSONUtils.parseObject(taskParams, DataxmlParameters.class);
+    public AbstractParameters parseParameters(ParametersNode parametersNode) {
+        return JSONUtils.parseObject(parametersNode.getTaskParams(), DataxmlParameters.class);
+    }
+
+    @Override
+    public ResourceParametersHelper getResources(String parameters) {
+        DataxmlParameters dataxmlParameters = JSONUtils.parseObject(parameters, DataxmlParameters.class);
+        if (dataxmlParameters == null) {
+            return new ResourceParametersHelper();
+        }
+        return dataxmlParameters.getResources();
     }
 }

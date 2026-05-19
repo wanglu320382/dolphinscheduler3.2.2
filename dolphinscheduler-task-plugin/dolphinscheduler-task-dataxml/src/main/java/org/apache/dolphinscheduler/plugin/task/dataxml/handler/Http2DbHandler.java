@@ -17,9 +17,6 @@
 
 package org.apache.dolphinscheduler.plugin.task.dataxml.handler;
 
-import org.apache.dolphinscheduler.common.model.OkHttpRequestHeaderContentType;
-import org.apache.dolphinscheduler.common.model.OkHttpRequestHeaders;
-import org.apache.dolphinscheduler.common.model.OkHttpResponse;
 import org.apache.dolphinscheduler.common.utils.OkHttpUtils;
 import org.apache.dolphinscheduler.plugin.task.api.TaskException;
 import org.apache.dolphinscheduler.plugin.task.dataxml.core.ParamContext;
@@ -41,6 +38,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -55,7 +53,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 public class Http2DbHandler {
 
-    private static final int CONNECT_TIMEOUT_MS = 60000;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final DataSourceResolver dataSourceResolver;
@@ -83,11 +80,8 @@ public class Http2DbHandler {
             int total = 0;
             int commitCount = 0;
             while (true) {
-                OkHttpResponse response = sendRequest(url, condColumns, param);
-                if (response.getStatusCode() < 200 || response.getStatusCode() >= 300) {
-                    throw new TaskException("HTTP 请求失败，statusCode=" + response.getStatusCode());
-                }
-                JsonNode root = OBJECT_MAPPER.readTree(response.getBody());
+                String responseBody = sendRequest(url, condColumns, param);
+                JsonNode root = OBJECT_MAPPER.readTree(responseBody);
                 JsonNodeHelper.assertHttpResponseSuccess(root);
                 // 列表路径：fromObjectName 可配置 JSON 锚点（如 data.pageData），未配置则走默认解析
                 String listPath = PlaceholderUtils.replace(template.getFromObjectName(), param, false);
@@ -137,11 +131,12 @@ public class Http2DbHandler {
         }
     }
 
-    private OkHttpResponse sendRequest(String url, List<Column> condColumns, ParamContext param) throws Exception {
+    private String sendRequest(String url, List<Column> condColumns, ParamContext param) throws Exception {
         Map<String, Object> body = JsonNodeHelper.buildRequestParams(condColumns, param);
-        OkHttpRequestHeaders headers = new OkHttpRequestHeaders();
-        headers.setOkHttpRequestHeaderContentType(OkHttpRequestHeaderContentType.APPLICATION_JSON);
-        return OkHttpUtils.post(url, headers, null, body, CONNECT_TIMEOUT_MS, CONNECT_TIMEOUT_MS, CONNECT_TIMEOUT_MS);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+        // 3.2.2 的 OkHttpUtils.post 在非 200 时会抛出异常
+        return OkHttpUtils.post(url, headers, null, body);
     }
 
     private String genInsertSql(String tableName, List<Column> mapColumns) throws TaskException {

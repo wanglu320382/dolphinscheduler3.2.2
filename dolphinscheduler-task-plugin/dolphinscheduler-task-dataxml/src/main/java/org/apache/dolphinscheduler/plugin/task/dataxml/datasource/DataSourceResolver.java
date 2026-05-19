@@ -50,11 +50,16 @@ public class DataSourceResolver {
             throw new TaskException("数据源标识不能为空");
         }
         int id = resolveDatasourceId(dsKey.trim());
-        DataSourceParameters params = (DataSourceParameters) resourceHelper
+        AbstractResourceParameters resourceParams = resourceHelper
                 .getResourceParameters(ResourceType.DATASOURCE, id);
-        if (params == null) {
+        if (resourceParams == null) {
             throw new TaskException("未找到数据源配置，dsKey=" + dsKey);
         }
+        if (!(resourceParams instanceof DataSourceParameters)) {
+            throw new TaskException("数据源尚未加载连接信息，dsKey=" + dsKey
+                    + "，请确认任务已关联该数据源且 Master 已完成资源装配");
+        }
+        DataSourceParameters params = (DataSourceParameters) resourceParams;
         DbType dbType = params.getType();
         if (dbType == null) {
             throw new TaskException("数据源类型未配置，dsKey=" + dsKey);
@@ -80,13 +85,20 @@ public class DataSourceResolver {
         if (datasourceMap == null || datasourceMap.isEmpty()) {
             throw new TaskException("未找到数据源配置，name=" + dsKey);
         }
-        for (Map.Entry<Integer, AbstractResourceParameters> entry : datasourceMap.entrySet()) {
-            if (!(entry.getValue() instanceof DataSourceParameters)) {
-                continue;
+        try {
+            int numericId = Integer.parseInt(dsKey);
+            if (datasourceMap.containsKey(numericId)) {
+                return numericId;
             }
-            DataSourceParameters params = (DataSourceParameters) entry.getValue();
-            if (dsKey.equals(params.getName())) {
-                return entry.getKey();
+        } catch (NumberFormatException ignored) {
+            // dsKey 为数据源名称，非数字 ID
+        }
+        for (Map.Entry<Integer, AbstractResourceParameters> entry : datasourceMap.entrySet()) {
+            if (entry.getValue() instanceof DataxmlDataSourceRef) {
+                DataxmlDataSourceRef ref = (DataxmlDataSourceRef) entry.getValue();
+                if (dsKey.equals(ref.getName())) {
+                    return entry.getKey();
+                }
             }
         }
         throw new TaskException("未找到数据源配置，name=" + dsKey);
