@@ -33,18 +33,17 @@ public class StorageConfiguration {
 
     @Bean
     public StorageOperate storageOperate() {
-        Optional<StorageType> storageTypeOptional =
-                StorageType.getStorageType(PropertyUtils.getUpperCaseString(RESOURCE_STORAGE_TYPE));
-        Optional<StorageOperate> storageOperate = storageTypeOptional.map(storageType -> {
-            ServiceLoader<StorageOperateFactory> storageOperateFactories =
-                    ServiceLoader.load(StorageOperateFactory.class);
-            for (StorageOperateFactory storageOperateFactory : storageOperateFactories) {
-                if (storageOperateFactory.getStorageOperate() == storageType) {
-                    return storageOperateFactory.createStorageOperate();
-                }
+        StorageType storageType = StorageType
+                .getStorageType(PropertyUtils.getUpperCaseString(RESOURCE_STORAGE_TYPE))
+                .orElse(StorageType.LOCAL);
+
+        ServiceLoader<StorageOperateFactory> storageOperateFactories =
+                ServiceLoader.load(StorageOperateFactory.class);
+        for (StorageOperateFactory storageOperateFactory : storageOperateFactories) {
+            if (storageOperateFactory.getStorageOperate() == storageType) {
+                return storageOperateFactory.createStorageOperate();
             }
-            return null;
-        });
-        return storageOperate.orElse(null);
+        }
+        return null;
     }
 }

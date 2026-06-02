@@ -24,6 +24,7 @@ import org.apache.dolphinscheduler.server.worker.registry.WorkerRegistryClient;
 import org.apache.dolphinscheduler.server.worker.rpc.WorkerMessageSender;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,11 +46,11 @@ public class WorkerTaskExecutorFactoryBuilder {
                                             WorkerConfig workerConfig,
                                             WorkerMessageSender workerMessageSender,
                                             WorkerTaskExecutorThreadPool workerManager,
-                                            StorageOperate storageOperate,
+                                            ObjectProvider<StorageOperate> storageOperateProvider,
                                             WorkerRegistryClient workerRegistryClient) {
         this.workerConfig = workerConfig;
         this.workerMessageSender = workerMessageSender;
-        this.storageOperate = storageOperate;
+        this.storageOperate = storageOperateProvider.getIfAvailable();
         this.workerRegistryClient = workerRegistryClient;
     }
 
