@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdataTemplates xmlns:ns2="http://www.dxml.com/xdata-templates/">
+   <!-- 数据采集测试 -->
+    <ns2:xdata-template name="test1" busType="DB2DB" fromDs="mysql_local" fromObjectName="datax_test.data_a" 
+        toDs="mysql_local" toObjectName="datax_test.data_b"
+                        taskType="INSERT" snatchType="TOTAL" clearOldDataType="ALL">
+        <!-- 测试字段a -->
+        <ns2:column fromName="a" toName="a" />
+        <!-- 测试字段b -->
+        <ns2:column fromName="b" toName="b" />
+    </ns2:xdata-template>
+    
+   <!-- 数据采集测试 -->
+    <ns2:xdata-template name="test1" busType="DB2DB" fromDs="mysql_local" fromObjectName="datax_test.data_a" 
+        toDs="mysql_local" toObjectName="datax_test.data_c"
+                        taskType="INSERT" snatchType="TOTAL" clearOldDataType="ALL">
+        <!-- 测试字段a -->
+        <ns2:column fromName="a" toName="a" />
+        <!-- 测试字段b -->
+        <ns2:column fromName="b" toName="b" />
+    </ns2:xdata-template>
+</xdataTemplates>
