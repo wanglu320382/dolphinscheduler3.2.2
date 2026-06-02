@@ -80,18 +80,9 @@ mybatis-plus:
     banner: false
 
 registry:
-  type: zookeeper
-  zookeeper:
-    namespace: dolphinscheduler
-    connect-string: localhost:2181
-    retry-policy:
-      base-sleep-time: 60ms
-      max-sleep: 300ms
-      max-retries: 5
-    session-timeout: 30s
-    connection-timeout: 9s
-    block-until-connected: 600ms
-    digest: ~
+  type: jdbc
+  term-refresh-interval: 2s
+  term-expire-times: 3
 
 security:
   authentication:
@@ -324,6 +315,16 @@ spring:
     username: root
     password: root
 
+registry:
+  hikari-config:
+    jdbc-url: jdbc:postgresql://127.0.0.1:5432/dolphinscheduler
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+    maximum-pool-size: 5
+    connection-timeout: 9000
+    idle-timeout: 600000
+
 ---
 spring:
   config:
@@ -331,9 +332,19 @@ spring:
       on-profile: mysql
   sql:
      init:
-       schema-locations: classpath:sql/dolphinscheduler_mysql.sql
+       schema-locations: classpath:sql/dolphinscheduler_mysql.sql,classpath:mysql_registry_init.sql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: linkage@12345
+
+registry:
+  hikari-config:
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: linkage@12345
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    maximum-pool-size: 5
+    connection-timeout: 9000
+    idle-timeout: 600000

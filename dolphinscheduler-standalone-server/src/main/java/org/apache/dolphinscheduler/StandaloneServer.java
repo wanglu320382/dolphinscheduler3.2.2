@@ -18,16 +18,18 @@
 package org.apache.dolphinscheduler;
 
 import org.apache.dolphinscheduler.common.CommonConfiguration;
+import org.apache.dolphinscheduler.plugin.datasource.api.plugin.DataSourceProcessorProvider;
 import org.apache.dolphinscheduler.plugin.storage.api.StorageConfiguration;
+import org.apache.dolphinscheduler.plugin.task.api.TaskPluginManager;
 import org.apache.dolphinscheduler.registry.api.RegistryConfiguration;
-
-import org.apache.curator.test.TestingServer;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.event.EventListener;
 
 @Slf4j
 @Import({CommonConfiguration.class, StorageConfiguration.class, RegistryConfiguration.class})
@@ -36,15 +38,17 @@ public class StandaloneServer {
 
     public static void main(String[] args) throws Exception {
         try {
-            // We cannot use try-with-resources to close "TestingServer", since SpringApplication.run() will not block
-            // the main thread.
-            TestingServer zookeeperServer = new TestingServer(true);
-            System.setProperty("registry.zookeeper.connect-string", zookeeperServer.getConnectString());
             SpringApplication.run(StandaloneServer.class, args);
         } catch (Exception ex) {
             log.error("StandaloneServer start failed", ex);
             System.exit(1);
         }
+    }
+
+    @EventListener
+    public void onApplicationReady(ApplicationReadyEvent readyEvent) {
+        TaskPluginManager.loadPlugin();
+        DataSourceProcessorProvider.initialize();
     }
 
 }
