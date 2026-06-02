@@ -17,14 +17,20 @@
 
 package org.apache.dolphinscheduler;
 
+import org.apache.dolphinscheduler.common.CommonConfiguration;
+import org.apache.dolphinscheduler.plugin.storage.api.StorageConfiguration;
+import org.apache.dolphinscheduler.registry.api.RegistryConfiguration;
+
 import org.apache.curator.test.TestingServer;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
 @Slf4j
+@Import({CommonConfiguration.class, StorageConfiguration.class, RegistryConfiguration.class})
 @SpringBootApplication
 public class StandaloneServer {
 
